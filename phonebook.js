@@ -13,6 +13,16 @@ app.get("/api/persons", (request, response) => {
     response.json(persons)
 })
 
+app.get("/api/persons/:id", (request, response) => {
+    const idNumber = +request.params.id
+    const singlePerson = persons.filter(p => p.id === idNumber)
+    if (singlePerson) {
+        response.json(singlePerson)
+    } else {
+        response.status(404).end()
+    }
+})
+
 app.get("/info", (request, response) => {
     const personsLenght = persons.length
     const newDate = new Date()

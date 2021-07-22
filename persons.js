@@ -1,4 +1,4 @@
-const persons = [
+let persons = [
     {
         "name": "Arto Hellas",
         "number": "040-123456",
