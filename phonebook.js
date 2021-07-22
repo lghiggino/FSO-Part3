@@ -44,6 +44,12 @@ app.post("/api/persons", (request,response) => {
         return response.status(400).json({error: "number missing"})
     }
 
+    const repeatedPerson = persons.filter(person => person.name === body.name)
+    if(repeatedPerson){
+        return response.status(400).json({error: "Name must be unique"})
+    }
+   
+
     const generateId = () => {
         return persons.length + 1
     }
@@ -55,7 +61,7 @@ app.post("/api/persons", (request,response) => {
     }
    
     persons = persons.concat(person)
-    response.json(person)
+    response.json(persons)
 })
 
 
