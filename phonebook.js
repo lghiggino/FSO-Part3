@@ -1,10 +1,11 @@
 const express = require("express")
-let persons = require("./persons.js")
-
-
 const app = express()
 app.use(express.json())
 
+let persons = require("./persons.js")
+
+
+// ROUTES
 app.get("/", (request, response) => {
     response.send("<h1>Hello from Phonebook</h1>")
 })
@@ -13,6 +14,7 @@ app.get("/api/persons", (request, response) => {
     response.json(persons)
 })
 
+//get ONE
 app.get("/api/persons/:id", (request, response) => {
     const idNumber = +request.params.id
     const singlePerson = persons.filter(p => p.id === idNumber)
@@ -22,6 +24,16 @@ app.get("/api/persons/:id", (request, response) => {
         response.status(404).end()
     }
 })
+
+//delete ONE
+app.delete("/api/persons/:id",  (request, response) => {
+    const idNumber = +request.params.id
+    persons = persons.filter(p => p.id !== idNumber)
+
+    response.status(204).end()
+})
+
+
 
 app.get("/info", (request, response) => {
     const personsLenght = persons.length
