@@ -21,6 +21,7 @@ app.get("/", (request, response) => {
 })
 
 app.get("/api/persons", (request, response) => {
+    request.body = ""
     response.json(persons)
 })
 
