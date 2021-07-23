@@ -4,6 +4,16 @@ app.use(express.json())
 
 let persons = require("./persons.js")
 
+//creating Middleware
+const requestLogger = (request, response, next) => {
+    console.log("Method", request.method)
+    console.log("Path", request.path)
+    console.log("Body", request.body)
+    console.log("-----")
+    next()
+}
+app.use(requestLogger)
+
 
 // ROUTES
 app.get("/", (request, response) => {
@@ -48,7 +58,6 @@ app.post("/api/persons", (request,response) => {
     if(repeatedPerson){
         return response.status(400).json({error: "Name must be unique"})
     }
-   
 
     const generateId = () => {
         return persons.length + 1
@@ -66,7 +75,6 @@ app.post("/api/persons", (request,response) => {
 
 
 
-
 app.get("/info", (request, response) => {
     const personsLenght = persons.length
     const newDate = new Date()
@@ -79,6 +87,11 @@ app.get("/info", (request, response) => {
     `)
 })
 
+const unknownEndpoint = (request, response, next) => {
+    response.status(404).send({"error": "Unknown Endpoint"})
+}
+
+app.use(unknownEndpoint)
 const PORT = 3002
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`)
