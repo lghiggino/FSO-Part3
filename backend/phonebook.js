@@ -1,6 +1,8 @@
 const express = require("express")
 const app = express()
+const cors = require('cors')
 app.use(express.json())
+app.use(cors())
 
 let persons = require("./persons.js")
 
@@ -37,7 +39,7 @@ app.get("/api/persons/:id", (request, response) => {
 })
 
 //delete ONE
-app.delete("/api/persons/:id",  (request, response) => {
+app.delete("/api/persons/:id", (request, response) => {
     const idNumber = +request.params.id
     persons = persons.filter(p => p.id !== idNumber)
 
@@ -45,19 +47,19 @@ app.delete("/api/persons/:id",  (request, response) => {
 })
 
 //post ONE
-app.post("/api/persons", (request,response) => {
+app.post("/api/persons", (request, response) => {
     const body = request.body
 
-    if(!body.name){
-        return response.status(400).json({error: "name missing"})
+    if (!body.name) {
+        return response.status(400).json({ error: "name missing" })
     }
-    if(!body.number){
-        return response.status(400).json({error: "number missing"})
+    if (!body.number) {
+        return response.status(400).json({ error: "number missing" })
     }
 
     const repeatedPerson = persons.filter(person => person.name === body.name)
-    if(repeatedPerson){
-        return response.status(400).json({error: "Name must be unique"})
+    if (repeatedPerson) {
+        return response.status(400).json({ error: "Name must be unique" })
     }
 
     const generateId = () => {
@@ -69,7 +71,7 @@ app.post("/api/persons", (request,response) => {
         number: body.number,
         id: generateId()
     }
-   
+
     persons = persons.concat(person)
     response.json(persons)
 })
@@ -89,7 +91,7 @@ app.get("/info", (request, response) => {
 })
 
 const unknownEndpoint = (request, response, next) => {
-    response.status(404).send({"error": "Unknown Endpoint"})
+    response.status(404).send({ "error": "Unknown Endpoint" })
 }
 
 app.use(unknownEndpoint)
